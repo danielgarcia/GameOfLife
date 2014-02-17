@@ -55,6 +55,8 @@ float priorY = 500;
             [numNeighbors addObject:subArr];
         }
 	}
+    [self schedule:@selector(nextFrame) interval:DELAY_IN_SECONDS];
+    [self scheduleUpdate];
 	return self;
 }
 
@@ -235,6 +237,14 @@ float priorY = 500;
  */
 -(void) nextFrame
 {
+    if(!done)
+    {
+        //count neighbors
+        //update world when all counting done
+        //update display
+        [self countNeighbors];
+        [self updateGrid];
+    }
 }
 
 
@@ -245,6 +255,16 @@ float priorY = 500;
  */
 - (int) prevRow: (int) row
 {
+    int prevRow;
+    if(row == 0)
+    {
+        prevRow = (NUM_ROWS - 1);
+    }
+    else
+    {
+        prevRow = row - 1;
+    }
+    return prevRow;
 }
 
 
@@ -255,6 +275,16 @@ float priorY = 500;
  */
 - (int) nextRow: (int) row
 {
+    int nextRow;
+    if(row == NUM_ROWS - 1)
+    {
+        nextRow = 0;
+    }
+    else
+    {
+        nextRow = row + 1;
+    }
+    return nextRow;
 }
 
 
@@ -265,6 +295,16 @@ float priorY = 500;
  */
 - (int) prevCol: (int) col
 {
+    int prevCol;
+    if(col == 0)
+    {
+        prevCol = (NUM_COLUMNS - 1);
+    }
+    else
+    {
+        prevCol = col - 1;
+    }
+    return prevCol;
 }
 
 
@@ -275,6 +315,16 @@ float priorY = 500;
  */
 - (int) nextCol: (int) col
 {
+    int nextCol;
+    if(col == NUM_COLUMNS - 1)
+    {
+        nextCol = 0;
+    }
+    else
+    {
+        nextCol = col + 1;
+    }
+    return nextCol;
 }
 
 
@@ -283,6 +333,55 @@ float priorY = 500;
  */
 -(void) countNeighbors
 {
+    for(int row = 0; row < (NUM_ROWS); row ++)
+    {
+        for(int col = 0; col < (NUM_COLUMNS); col ++)
+        {
+            //keep running total of number of neighbors and
+            //then store the number in numNeighbors array
+            int numNeighborsCell = 0;
+            
+            //test all cells for neighbors
+            //use if statements to test each spot
+            if([[[grid objectAtIndex:[self prevRow:row]] objectAtIndex: [self prevCol:col]] integerValue] == 1)
+            {
+                numNeighborsCell ++;
+            }
+            if([[[grid objectAtIndex:[self prevRow:row]] objectAtIndex:col] integerValue] == 1)
+            {
+                numNeighborsCell ++;
+            }
+            if([[[grid objectAtIndex:[self prevRow:row]] objectAtIndex: [self nextCol:col]] integerValue] == 1)
+            {
+                numNeighborsCell ++;
+            }
+            if([[[grid objectAtIndex:row] objectAtIndex: [self prevCol:col]] integerValue] == 1)
+            {
+                numNeighborsCell ++;
+            }
+            if([[[grid objectAtIndex:row] objectAtIndex: [self nextCol:col]] integerValue] == 1)
+            {
+                numNeighborsCell ++;
+            }
+            if([[[grid objectAtIndex:[self nextRow:row]] objectAtIndex: [self prevCol:col]] integerValue] == 1)
+            {
+                numNeighborsCell ++;
+            }
+            if([[[grid objectAtIndex:[self nextRow:row]] objectAtIndex: col] integerValue] == 1)
+            {
+                numNeighborsCell ++;
+            }
+            if([[[grid objectAtIndex:[self nextRow:row]] objectAtIndex: [self nextCol:col]] integerValue] == 1)
+            {
+                numNeighborsCell ++;
+            }
+            //make the corresponding cell in the numNeighbors array the
+            //number of neighbors the cell in the first array has
+            NSMutableArray* array = [numNeighbors objectAtIndex:row];
+            [array replaceObjectAtIndex:col withObject:[NSNumber numberWithInt:numNeighborsCell]];
+            
+        }
+    }
 }
 
 
@@ -291,6 +390,27 @@ float priorY = 500;
  */
 -(void)updateGrid
 {
+    //go through all the cells in numNeighbors and change grid accordingly
+    for(int row = 0; row < (NUM_ROWS); row ++)
+    {
+        for(int col = 0; col < (NUM_COLUMNS); col ++)
+        {
+            //tests each cell in the number of neighbors array for its number and then changes
+            //the cell in the (grid) array accordingly
+            int numberNeighbors = [[[numNeighbors objectAtIndex:row] objectAtIndex: col] integerValue];
+            if((numberNeighbors <= 1) || (numberNeighbors >= 4))
+            {
+                [[grid objectAtIndex:row] replaceObjectAtIndex:col withObject:@0];
+                //an abbreviation for [NSNumber numberWithInt: 0] is @0
+            }
+            if(numberNeighbors == 3)
+            {
+                [[grid objectAtIndex:row] replaceObjectAtIndex:col withObject:@1];
+                //an abbreviation for [NSNumber numberWithInt: 1] is @1
+            }
+            
+        }
+    }
 }
 
 @end
