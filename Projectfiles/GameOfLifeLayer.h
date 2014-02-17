@@ -12,5 +12,13 @@
 -(id) init;
 -(void) draw;
 -(void) update: (ccTime) delta;
+-(void) resetArrays;
+-(void) nextFrame;
+-(int) prevRow:(int)row;
+-(int) nextRow:(int)row;
+-(int) prevCol:(int)col;
+-(int) nextCol:(int)col;
+-(void) countNeighbors;
+-(void) updateGrid;
 
 @end

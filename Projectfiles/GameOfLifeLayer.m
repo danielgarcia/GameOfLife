@@ -58,6 +58,10 @@ float priorY = 500;
 	return self;
 }
 
+
+/**
+ * It draws the board and buttons
+ */
 -(void) draw
 {
     //this draws a rectangle
@@ -103,6 +107,10 @@ float priorY = 500;
 
 
 
+/**
+ * It updates things after an action
+ * @param ccTime delta To be properly called every frame
+ */
 -(void) update: (ccTime) delta
 {
     KKInput* input = [KKInput sharedInput];
@@ -205,5 +213,84 @@ float priorY = 500;
 }
 
 
+
+/**
+ * fill array with spaces
+ */
+-(void) resetArrays
+{
+    for(int row = 0; row < NUM_ROWS; row ++)
+    {
+        for(int col = 0; col < NUM_COLUMNS; col ++)
+        {
+            //an abbreviation for [NSNumber numberWithInt: 0] is @0
+            [[grid objectAtIndex:row] replaceObjectAtIndex:col withObject:@0];
+        }
+    }
+}
+
+
+/**
+ * the next frame
+ */
+-(void) nextFrame
+{
+}
+
+
+/**
+ * if there is no row to check then it checks last row for wrap around
+ * @param int row the row number
+ * @return int spot to check for previous row
+ */
+- (int) prevRow: (int) row
+{
+}
+
+
+/**
+ * if there is no next row, the first row is checked
+ * @param int row the row number
+ * @return int spot to check for next row
+ */
+- (int) nextRow: (int) row
+{
+}
+
+
+/**
+ * if there is no column to check then it checks last column for wrap around
+ * @param int col the column number
+ * @return int spot to check for previous column
+ */
+- (int) prevCol: (int) col
+{
+}
+
+
+/**
+ * if there is no next column, the first column is checked
+ * @param int col the column number
+ * @return int spot to check for next column
+ */
+- (int) nextCol: (int) col
+{
+}
+
+
+/**
+ * count the number of neighbors each cell has
+ */
+-(void) countNeighbors
+{
+}
+
+
+/**
+ * Updates the Grid
+ */
+-(void)updateGrid
+{
+}
 
 @end
