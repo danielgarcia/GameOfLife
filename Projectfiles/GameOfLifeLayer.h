@@ -10,5 +10,6 @@
 @interface GameOfLifeLayer : CCLayer
 
 -(id) init;
+-(void) draw;
 
 @end
